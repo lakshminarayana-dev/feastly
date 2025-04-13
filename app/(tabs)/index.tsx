@@ -135,7 +135,7 @@ const Index = () => {
                         numColumns={2}
                         showsVerticalScrollIndicator={false}
                         renderItem={({item, i}) => (
-                            <MealCard category={activeCategory} item={item} index={i} navigation={navigation}/>
+                            <MealCard category={activeCategory} item={item} index={i}/>
                         )}
                         onEndReachedThreshold={0.1}
                         ListFooterComponent={<View style={{height: hp(10)}}/>} // Add safe space
