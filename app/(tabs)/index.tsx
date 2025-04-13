@@ -1,10 +1,8 @@
-import {Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View,} from "react-native";
+import {Image, SafeAreaView, ScrollView, StyleSheet, Text, View,} from "react-native";
 import React, {useEffect, useState} from "react";
 import {StatusBar} from "expo-status-bar";
 import {heightPercentageToDP as hp,} from "react-native-responsive-screen";
 import axios from "axios";
-import Meals from "@/components/Meals";
-import Utils from "@/utils/Utils";
 import Categories from "@/components/Categories";
 import icons from "@/constants/icons";
 import SearchBar from "@/components/SearchBar";
@@ -12,12 +10,13 @@ import Loading from "@/components/Loading";
 import MasonryList from "@react-native-seoul/masonry-list";
 import MealCard from "@/components/MealCard";
 import {useNavigation} from "@react-navigation/native";
+import {MealProps} from "@/interfaces/interfaces";
 
 const Index = () => {
   const navigation = useNavigation();
   const [activeCategory, setActiveCategory] = useState("Beef");
   const [categories, setCategories] = useState([]);
-  const [meals, setMeals] = useState([]);
+  const [meals, setMeals] = useState<MealProps[]>([]);
   const [search, setSearch] = useState("");
 
   const getCategories = async () => {
@@ -125,7 +124,7 @@ const Index = () => {
               />
               <View className="mt-4">
                 {categories.length == 0 || meals.length == 0 ? (
-                    <Loading size="large" className="mt-20"/>
+                    <Loading size="large" className="mt-20" color="red"/>
                 ) : (
                     <MasonryList
                         data={meals}
@@ -136,6 +135,7 @@ const Index = () => {
                             <MealCard category={activeCategory} item={item} index={i} navigation={navigation}/>
                         )}
                         onEndReachedThreshold={0.1}
+                        ListFooterComponent={<View style={{height: hp(10)}}/>} // Add safe space
                     />
                 )}
               </View>
