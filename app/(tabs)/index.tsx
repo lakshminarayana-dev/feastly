@@ -11,6 +11,9 @@ import MasonryList from "@react-native-seoul/masonry-list";
 import MealCard from "@/components/MealCard";
 import {useNavigation} from "@react-navigation/native";
 import {MealProps} from "@/interfaces/interfaces";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/redux/store";
+import {addFavorite, removeFavorite} from "@/redux/favoritesSlice";
 
 const Index = () => {
   const navigation = useNavigation();

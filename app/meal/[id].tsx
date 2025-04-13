@@ -10,7 +10,7 @@ import {useNavigation} from "@react-navigation/native";
 import axios from "axios";
 import {useLocalSearchParams} from "expo-router";
 import Animated, {FadeIn, FadeInDown} from "react-native-reanimated";
-import {MealDetailsProps} from "@/interfaces/interfaces";
+import {MealDetailsProps, MealProps} from "@/interfaces/interfaces";
 import Loading from "@/components/Loading";
 import YoutubeIframe from "react-native-youtube-iframe";
 import {
@@ -20,13 +20,32 @@ import {
 import AntDesign from "@expo/vector-icons/AntDesign";
 import {FontAwesome5, MaterialIcons, EvilIcons} from "@expo/vector-icons";
 import InfoCard from "@/components/InfoCard";
+import {useDispatch, useSelector} from "react-redux";
+import {addFavorite, removeFavorite} from "@/redux/favoritesSlice";
+import {RootState} from "@/redux/store";
+
 
 const MealDetails = () => {
   const {id} = useLocalSearchParams();
   const navigation = useNavigation();
   const [meal, setMeal] = useState<MealDetailsProps | null>(null);
-  const [isFavorite, setIsFavorite] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const dispatch = useDispatch();
+  const favorites = useSelector((state: RootState) => state.favorites.meals);
+  const isFavorite = favorites.some((item: MealProps) => item.idMeal === id);
+
+  const handleFavorite = () => {
+    if (isFavorite) {
+      dispatch(removeFavorite(meal.idMeal));
+    } else {
+      dispatch(addFavorite({
+        idMeal: meal.idMeal,
+        strMeal: meal.strMeal,
+        strMealThumb: meal.strMealThumb,
+      }));
+    }
+  };
 
   const getMealData = async (mealId: string) => {
     try {
@@ -97,7 +116,7 @@ const MealDetails = () => {
           </TouchableOpacity>
           <TouchableOpacity
               className="p-3 rounded-full mr-3 bg-white-100"
-              onPress={() => setIsFavorite(!isFavorite)}
+              onPress={() => handleFavorite()}
           >
             <AntDesign name={isFavorite ? "heart" : "hearto"} size={24} color="red"/>
           </TouchableOpacity>
